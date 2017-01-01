@@ -122,4 +122,11 @@
     E__NOTE(_E5),          \
     E__NOTE(_D5),
 
+#define VILLIAN_SOUND \
+    H__NOTE(_F5), Q__NOTE(_REST), Q__NOTE(_C6), E__NOTE(_B5),    \
+    E__NOTE(_C6), E__NOTE(_B5), E__NOTE(_C6), E__NOTE(_B5),      \
+    E__NOTE(_REST), Q__NOTE(_C6), H__NOTE(_GS5), \
+    H__NOTE(_F5),
+
+
 #endif
