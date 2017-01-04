@@ -110,7 +110,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_LOWER] = {
   {KC_GRV,  KC_F1,    KC_F2,   KC_F3,    KC_F4,          KC_F5,   KC_F6,   KC_F7,   KC_F8,    KC_F9,   KC_F10, KC_DEL},
-  {KC_MUTE, KC_BSPC,  KC_UP,   KC_DEL,   KC_WWW_FORWARD, _______, _______, _______, _______,  _______,   _______,  _______},
+  {M(2), KC_BSPC,  KC_UP,   KC_DEL,   KC_WWW_FORWARD, _______, _______, _______, _______,  _______,   _______,  _______},
   {_______, KC_LEFT,  KC_DOWN, KC_RIGHT, KC_WWW_REFRESH, _______, _______, _______, _______,  _______,   _______,  _______},
   {KC_VOLU, KC_MPRV,  KC_MPLY, KC_MNXT,  KC_WWW_BACK,    _______, _______, _______, _______,  _______,   _______,  _______},
   {KC_VOLD, M(0),  _______, _______,  _______,        _______, _______, _______, _______,  _______, _______,  _______}
@@ -205,6 +205,11 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt) //
     case 1: // this would trigger when you hit a key mapped as M(1)  dpallen@wpi.edu
       if (record->event.pressed) {
         return MACRO( I(8), T(D), T(P), T(A), T(L), T(L), T(E), T(N), D(LSFT), T(AT), U(LSFT), T(W), T(P), T(I), T(DOT), T(E), T(D), T(U), END  );
+      }
+      break;
+    case 2: // this would trigger when you hit a key mapped as M(1)  dpallen@wpi.edu
+      if (record->event.pressed) {
+        return MACRO( I(8), D(LALT), T(TAB), U(LALT), END  );
       }
       break;
   }
