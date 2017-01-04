@@ -49,10 +49,10 @@
     M__NOTE(_CS7, 20),
 
 #define QWERTY_SOUND \
-    E__NOTE(_GS6 ),  \
+    E__NOTE(_FS6 ),  \
     E__NOTE(_A6  ),  \
     S__NOTE(_REST),  \
-    Q__NOTE(_E7  ),
+    Q__NOTE(_D6  ),
 
 #define COLEMAK_SOUND \
     E__NOTE(_GS6 ),   \
@@ -63,14 +63,16 @@
     ED_NOTE(_GS7 ),
 
 #define DVORAK_SOUND \
-    E__NOTE(_GS6 ),  \
-    E__NOTE(_A6  ),  \
+    E__NOTE(_B6  ),  \
+    E__NOTE(_C7  ),  \
+    E__NOTE(_REST),  \
+    E__NOTE(_F7  ),  \
     S__NOTE(_REST),  \
-    E__NOTE(_E7  ),  \
+    E__NOTE(_G7  ),  \
+    E__NOTE(_REST),  \
+    E__NOTE(_E7 ),  \
     S__NOTE(_REST),  \
-    E__NOTE(_FS7 ),  \
-    S__NOTE(_REST),  \
-    E__NOTE(_E7  ),
+    Q__NOTE(_F7  ),
 
 #define PLOVER_SOUND \
     E__NOTE(_GS6 ),  \
@@ -98,13 +100,23 @@
     E__NOTE(_GS6),        \
     E__NOTE(_A6 ),
 
+#define MUSIC_DESCALE_SOUND \
+    E__NOTE(_A6 ),        \
+    E__NOTE(_GS6),        \
+    E__NOTE(_FS6),        \
+    E__NOTE(_E6 ),        \
+    E__NOTE(_D6 ),        \
+    E__NOTE(_CS6),        \
+    E__NOTE(_B5 ),        \
+    E__NOTE(_A5 ),        
+
 #define CAPS_LOCK_ON_SOUND \
-    E__NOTE(_A3),          \
-    E__NOTE(_B3),
+    Q__NOTE(_A4),          \
+    E__NOTE(_D5),
 
 #define CAPS_LOCK_OFF_SOUND \
-    E__NOTE(_B3),           \
-    E__NOTE(_A3),
+    Q__NOTE(_D5),           \
+    E__NOTE(_A4),
 
 #define SCROLL_LOCK_ON_SOUND \
     E__NOTE(_D4),            \
@@ -117,7 +129,7 @@
 #define NUM_LOCK_ON_SOUND \
     E__NOTE(_D5),         \
     E__NOTE(_E5),
-
+    
 #define NUM_LOCK_OFF_SOUND \
     E__NOTE(_E5),          \
     E__NOTE(_D5),

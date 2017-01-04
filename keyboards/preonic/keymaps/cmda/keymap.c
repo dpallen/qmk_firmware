@@ -1,6 +1,8 @@
 #include "preonic.h"
 #include "action_layer.h"
 #include "eeconfig.h"
+#include "led.h"
+
 #ifdef AUDIO_ENABLE
   #include "audio.h"
 #endif
@@ -10,12 +12,12 @@
 // Layer names don't all need to be of the same length, obviously, and you can also skip them
 // entirely and just use numbers.
 #define _QWERTY 0
-#define _GAME 3
-#define _ARROW 12
-#define _NUMPAD 13
-#define _LOWER 14
-#define _RAISE 15
-#define _ADJUST 16
+#define _GAME 1
+#define _ARROW 2
+#define _NUMPAD 3
+#define _LOWER 4
+#define _RAISE 5
+#define _ADJUST 6
 
 enum preonic_keycodes {
   QWERTY = SAFE_RANGE, 
@@ -50,7 +52,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   {KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                KC_Y,    KC_U,    KC_I,     KC_O,     KC_P,     KC_DEL},
   {RAISE, KC_A,    KC_S,    KC_D,    KC_F,                KC_G,    KC_H,    KC_J,     KC_K,     KC_L,     KC_SCLN, KC_QUOT},
   {KC_LCTL,   KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                KC_N,    KC_M,    KC_COMM,  KC_DOT,   KC_SLSH,  SFT_T(KC_ENT)},
-  {KC_LSFT,   KC_LCTL, KC_LGUI, KC_LALT, LOWER,   KC_SPC, KC_SPC, RAISE,   KC_MINUS, KC_EQUAL, KC_LBRC,  KC_RBRC}
+  {KC_LSFT,  M(0), KC_LGUI, KC_LALT, LOWER,   KC_SPC, KC_SPC, RAISE,   KC_MINUS, KC_EQUAL, KC_LBRC,  KC_RBRC}
 },
 /* Colemak
  * ,-----------------------------------------------------------------------------------.
@@ -67,10 +69,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_GAME] = {
   {KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,     KC_9,     KC_0,     KC_BSPC},
-  {KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,     KC_O,     KC_P,     KC_BSLASH},
-  {KC_LCTL, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,     KC_L,     KC_SCLN,  KC_QUOT},
-  {KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM,  KC_DOT,   KC_SLSH,  KC_ENT },
-  {_______, _______, XXXXXXX, _______, _______, KC_SPC,  _______, _______, _______, _______, _______,   _______}
+  {KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,     KC_O,     KC_P,     _______},
+  {KC_LSFT, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,     KC_L,     KC_SCLN,  KC_QUOT},
+  {KC_LCTL, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM,  KC_DOT,   KC_SLSH,  _______},
+  {_______, XXXXXXX, XXXXXXX, _______, _______, KC_SPC,  _______, _______, _______, _______, _______,   _______}
 },
 
 /* NUMPAD
@@ -87,11 +89,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_NUMPAD] = {
-  {KC_ESC, KC_PSLS, KC_PAST, KC_PMNS,  _______, _______, _______, _______, _______, _______, _______, _______},
-  {KC_P7,  KC_P8,   KC_P9,   KC_PPLS,  _______, _______, _______, _______, _______, _______, _______, _______},
-  {KC_P4,  KC_P5,   KC_P6,   KC_PPLS,  _______, _______, _______, _______, _______, _______, _______, _______},
-  {KC_P1,  KC_P2,   KC_P3,   KC_PENT,  _______, _______, _______, _______, _______, _______, _______, _______},
-  {KC_P0,  KC_P0,   KC_PDOT, KC_PENT,  _______, _______, _______, _______, _______, _______, _______, _______},
+  {_______, _______, _______, _______, _______, _______, _______, _______, KC_ESC, KC_PSLS, KC_PAST, KC_PMNS},
+  {_______, _______, _______, _______, _______, _______, _______, _______, KC_P7,  KC_P8,   KC_P9,   KC_PPLS},
+  {_______, _______, _______, _______, _______, _______, _______, _______, KC_P4,  KC_P5,   KC_P6,   KC_PPLS},
+  {_______, _______, _______, _______, _______, _______, _______, _______, KC_P1,  KC_P2,   KC_P3,   KC_PENT},
+  {_______, _______, _______, _______, _______, _______, _______, _______, KC_P0,  KC_P0,   KC_PDOT, KC_PENT},
 },
 /* Lower
  * ,-----------------------------------------------------------------------------------.
@@ -108,10 +110,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_LOWER] = {
   {KC_GRV,  KC_F1,    KC_F2,   KC_F3,    KC_F4,          KC_F5,   KC_F6,   KC_F7,   KC_F8,    KC_F9,   KC_F10, KC_DEL},
-  {KC_MUTE, KC_BSPC,  KC_UP,   KC_DEL,   KC_WWW_FORWARD, _______, _______, _______, KC_PSLS,  KC_P7,   KC_P8,  KC_P9},
-  {_______, KC_LEFT,  KC_DOWN, KC_RIGHT, KC_WWW_REFRESH, _______, _______, _______, KC_PAST,  KC_P4,   KC_P5,  KC_P6},
-  {KC_VOLU, KC_MPRV,  KC_MPLY, KC_MNXT,  KC_WWW_BACK,    _______, _______, _______, KC_PMNS,  KC_P1,   KC_P2,  KC_P3},
-  {KC_VOLD, _______,  _______, _______,  _______,        _______, _______, _______, KC_PPLS,  KC_PENT, KC_P0,  KC_PDOT}
+  {KC_MUTE, KC_BSPC,  KC_UP,   KC_DEL,   KC_WWW_FORWARD, _______, _______, _______, _______,  _______,   _______,  _______},
+  {_______, KC_LEFT,  KC_DOWN, KC_RIGHT, KC_WWW_REFRESH, _______, _______, _______, _______,  _______,   _______,  _______},
+  {KC_VOLU, KC_MPRV,  KC_MPLY, KC_MNXT,  KC_WWW_BACK,    _______, _______, _______, _______,  _______,   _______,  _______},
+  {KC_VOLD, _______,  _______, _______,  _______,        _______, _______, _______, _______,  _______, _______,  _______}
 },
 
 /* Raise
@@ -132,7 +134,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   {_______, KC_PGDN, KC_UP, KC_PGUP,  _______, _______, _______, KC_PGUP, KC_UP,   _______,  _______, KC_BSLASH},
   {_______, KC_LEFT, KC_DOWN, KC_RIGHT,  _______, _______, KC_HOME, KC_LEFT, KC_DOWN, KC_RIGHT, _______, _______},
   {_______, KC_PAUSE, KC_HOME, KC_END, KC_INS, KC_PSCR, _______, KC_END,  _______, _______,  _______, _______},
-  {_______, _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______}
+  {_______, M(1), _______, _______, _______, _______, _______, _______, KC_QUES, KC_COLN, _______,  KC_CAPS}
 },
 
 /* Adjust (Lower + Raise)
@@ -146,7 +148,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |      |Voice-|Voice+|Mus On|MusOff| Sleep| Wake | Arrow| Game |NUMPAD|      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |      |      |      |     Reset   |      |      |      |      |      |
- * `-----------------------------------------------------------------------------------'
+ * `---------------------------------------------------------------------------------aa--'
  */
 [_ADJUST] = {
   {_______, _______,  QWERTY, _______,  _______, _______,          _______,        _______, _______, _______, _______, _______},
@@ -161,20 +163,56 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 #ifdef AUDIO_ENABLE
 float tone_startup[][2] = SONG(VILLIAN_SOUND);
-
 float tone_qwerty[][2]     = SONG(QWERTY_SOUND);
-float tone_dvorak[][2]     = SONG(DVORAK_SOUND);
 float tone_colemak[][2]    = SONG(COLEMAK_SOUND);
+float tone_dvorak[][2]    = SONG(DVORAK_SOUND);
+
+float tone_caps_on[][2]    = SONG(CAPS_LOCK_ON_SOUND);
+float tone_caps_off[][2]   = SONG(CAPS_LOCK_OFF_SOUND);
 
 float tone_goodbye[][2] = SONG(GOODBYE_SOUND);
 
 float music_scale[][2]     = SONG(MUSIC_SCALE_SOUND);
+
 #endif
+
+// //Tap Dance Declarations
+// enum {
+//   TD_ESC_CAPS = 0
+// };
+
+// //Tap Dance Definitions
+// qk_tap_dance_action_t tap_dance_actions[] = {
+//   //Tap once for Esc, twice for Caps Lock
+//   [TD_ESC_CAPS]  = ACTION_TAP_DANCE_DOUBLE(KC_ESC, KC_CAPS)
+// // Other declarations would go here, separated by commas, if you have them
+// };
 
 void persistant_default_layer_set(uint16_t default_layer) {
   eeconfig_update_default_layer(default_layer);
   default_layer_set(default_layer);
 }
+
+const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt) // this is the function signature -- just copy/paste it into your keymap file as it is.
+{
+  switch(id) {
+    case 0: // this would trigger when you hit a key mapped as M(0) davidallen417@gmail.com
+      if (record->event.pressed) {
+        return MACRO( I(8), T(D), T(A), T(V), T(I), T(D), T(A), T(L), T(L), T(E), T(N), T(4), T(1), T(7), D(LSFT), T(AT), U(LSFT), T(G), T(M), T(A), T(I), T(L), T(DOT), T(C), T(O), T(M), END  ); 
+      }
+      break;
+
+    case 1: // this would trigger when you hit a key mapped as M(1)  dpallen@wpi.edu
+      if (record->event.pressed) {
+        return MACRO( I(8), T(D), T(P), T(A), T(L), T(L), T(E), T(N), D(LSFT), T(AT), U(LSFT), T(W), T(P), T(I), T(DOT), T(E), T(D), T(U), END  );
+      }
+      break;
+  }
+  return MACRO_NONE;
+};
+
+
+
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       switch(keycode) {
@@ -238,30 +276,53 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return true;
 };
 
-void matrix_init_user(void) {
-    #ifdef AUDIO_ENABLE
-        startup_user();
-    #endif
-}
-
 #ifdef AUDIO_ENABLE
 
-void startup_user()
-{
-    _delay_ms(20); // gets rid of tick
-    PLAY_NOTE_ARRAY(tone_startup, false, 0);
-}
+  void matrix_init_user(void){
+      _delay_ms(20); // gets rid of tick
+      startup_user();
+  }
 
-void shutdown_user()
-{
-    PLAY_NOTE_ARRAY(tone_goodbye, false, 0);
-    _delay_ms(150);
-    stop_all_notes();
-}
+  void led_set_user(uint8_t usb_led)
+  {
+      static uint8_t old_usb_led = 0;
 
-void music_on_user(void)
-{
-    music_scale_user();
-}
+      _delay_ms(10); // gets rid of tick
+
+      if (!is_playing_notes())
+      {
+          if ((usb_led & (1<<USB_LED_CAPS_LOCK)) && !(old_usb_led & (1<<USB_LED_CAPS_LOCK)))
+          {
+                  // If CAPS LK LED is turning on...
+                  PLAY_NOTE_ARRAY(tone_caps_on,  false, LEGATO);
+          }
+          else if (!(usb_led & (1<<USB_LED_CAPS_LOCK)) && (old_usb_led & (1<<USB_LED_CAPS_LOCK)))
+          {
+                  // If CAPS LK LED is turning off...
+                  PLAY_NOTE_ARRAY(tone_caps_off, false, LEGATO);
+          }
+      }
+      old_usb_led = usb_led;
+
+  }
+    
+
+  void startup_user()
+  {
+      _delay_ms(20); // gets rid of tick
+      PLAY_NOTE_ARRAY(tone_startup, false, 0);
+  }
+
+  void shutdown_user()
+  {
+      PLAY_NOTE_ARRAY(tone_goodbye, false, 0);
+      _delay_ms(150);
+      stop_all_notes();
+  }
+
+  void music_on_user(void)
+  {
+      PLAY_NOTE_ARRAY(music_scale, false, 0);
+  }
 
 #endif
